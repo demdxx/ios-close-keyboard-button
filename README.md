@@ -7,6 +7,8 @@ ios-close-keyboard-button
 
 Thanks for button images https://github.com/gavingmiller/evernote-show-hide-keyboard
 
+![Example](https://raw.github.com/demdxx/ios-close-keyboard-button/master/screen.png)
+
 License
 =======
 
