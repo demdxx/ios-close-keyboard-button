@@ -9,6 +9,45 @@ Thanks for button images https://github.com/gavingmiller/evernote-show-hide-keyb
 
 ![Example](https://raw.github.com/demdxx/ios-close-keyboard-button/master/screen.png)
 
+How to use
+==========
+
+```objectivec
+
+#import "UIViewController+KeyboardClose.h"
+
+@interface MyController : UIViewController
+
+// ...
+
+@end
+
+...
+
+@implementation UIViewController
+
+#pragma mark UIViewController load/unload view events
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    // Register keyboard close button
+    [self registerKeyboardCloseButton];
+    
+    // ...
+}
+
+- (void)viewDidUnload
+{
+    // Unregister all accepted events
+    [self unregisterKeyboardCloseButtonFast];
+    [super viewDidUnload];
+}
+
+@end
+```
+
 License
 =======
 
