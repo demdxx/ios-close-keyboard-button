@@ -36,7 +36,8 @@ _UIViewAnimationOptionsFromCurve(UIViewAnimationCurve curve)
 
 - (void)registerKeyboardCloseButton
 {
-    UIButton *closeButton = (UIButton *)[self.view viewWithTag:tUIKeyboardCloseButton];
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    UIButton *closeButton = (UIButton *)[window viewWithTag:tUIKeyboardCloseButton];
     
     if (nil==closeButton)
     {
@@ -66,8 +67,8 @@ _UIViewAnimationOptionsFromCurve(UIViewAnimationCurve curve)
         arrow.frame = CGRectMake(31, 5, 10, 14);
         [closeButton addSubview:arrow];
         
-        [self.view addSubview:closeButton];
-        [self.view bringSubviewToFront:closeButton];
+        [window addSubview:closeButton];
+        [window bringSubviewToFront:closeButton];
         
         // Set button close event
         [closeButton addTarget:self action:@selector(clickKeyboardCloseButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -156,7 +157,7 @@ _UIViewAnimationOptionsFromCurve(UIViewAnimationCurve curve)
     CGRect btnFrame = [closeButton frame];
     if (show)
     {
-        CGFloat viewHeight = [self.view convertRect:keyboardFrame fromView:nil].origin.y;
+        CGFloat viewHeight = keyboardFrame.origin.y; //[self.view convertRect:keyboardFrame fromView:nil].origin.y;
 
         return CGPointMake(keyboardFrame.size.width-btnFrame.size.width-7, viewHeight-btnFrame.size.height-8);
     }
@@ -176,8 +177,9 @@ _UIViewAnimationOptionsFromCurve(UIViewAnimationCurve curve)
     [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
     [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&frameEnd];
 
-    UIButton *closeButton = (UIButton *)[self.view viewWithTag:tUIKeyboardCloseButton];
-    [self.view bringSubviewToFront:closeButton];
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    UIButton *closeButton = (UIButton *)[window viewWithTag:tUIKeyboardCloseButton];
+    [window bringSubviewToFront:closeButton];
 
     [self keyboardCloseButtonShow:closeButton
                    animationCurve:animationCurve
@@ -196,8 +198,9 @@ _UIViewAnimationOptionsFromCurve(UIViewAnimationCurve curve)
     [[userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] getValue:&animationDuration];
     [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] getValue:&frameEnd];
 
-    UIButton *closeButton = (UIButton *)[self.view viewWithTag:tUIKeyboardCloseButton];
-    [self.view bringSubviewToFront:closeButton];
+    UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    UIButton *closeButton = (UIButton *)[window viewWithTag:tUIKeyboardCloseButton];
+    [window bringSubviewToFront:closeButton];
 
     [self keyboardCloseButtonHide:closeButton
                    animationCurve:animationCurve
