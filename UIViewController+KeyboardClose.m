@@ -40,42 +40,42 @@ _UIViewAnimationOptionsFromCurve(UIViewAnimationCurve curve)
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
+    if (nil==window)
+        window = [[[UIApplication sharedApplication] delegate] window];
+
     UIButton *closeButton = (UIButton *)[window viewWithTag:tUIKeyboardCloseButton];
     
-    if (nil!=closeButton)
+    if (nil==closeButton)
     {
-        [closeButton removeFromSuperview];
-        closeButton = nil;
+        // Make button
+        closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        [closeButton setFrame:CGRectMake(0, 0, mButtonWidth, mButtonHeight)];
+        [closeButton setTag:tUIKeyboardCloseButton];
+
+        // Set button position
+        CGRect vFrame = self.view.frame;
+        CGPoint position = [self keyboardCloseButtonPosition:closeButton keyboardFrame:CGRectMake(0, vFrame.size.height, vFrame.size.width, 300) show:NO];
+        [closeButton setFrame:CGRectMake(position.x, position.y, mButtonWidth, mButtonHeight)];
+
+        // Set button background
+        UIImage *btnBackground = [[UIImage imageNamed:@"edit-button-bg.png"] stretchableImageWithLeftCapWidth:4 topCapHeight:0];
+        [closeButton setBackgroundImage:btnBackground forState:UIControlStateNormal];
+        [closeButton setBackgroundImage:btnBackground forState:UIControlStateHighlighted];
+
+        // Set button keyboard image
+        UIImageView *keyboard = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"edit-button-icon-keyboard.png"]];
+        keyboard.frame = CGRectMake(5, 5, 22, 14);
+        keyboard.tag = tUIKeyboardCloseButtonKeyBoardImage;
+        [closeButton addSubview:keyboard];
+        
+        // Set button arrow image
+        UIImageView *arrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"edit-button-icon-up.png"]];
+        arrow.frame = CGRectMake(31, 5, 10, 14);
+        [closeButton addSubview:arrow];
+        
+        [window addSubview:closeButton];
+        [window bringSubviewToFront:closeButton];
     }
-
-    // Make button
-    closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [closeButton setFrame:CGRectMake(0, 0, mButtonWidth, mButtonHeight)];
-    [closeButton setTag:tUIKeyboardCloseButton];
-
-    // Set button position
-    CGRect vFrame = self.view.frame;
-    CGPoint position = [self keyboardCloseButtonPosition:closeButton keyboardFrame:CGRectMake(0, vFrame.size.height, vFrame.size.width, 300) show:NO];
-    [closeButton setFrame:CGRectMake(position.x, position.y, mButtonWidth, mButtonHeight)];
-
-    // Set button background
-    UIImage *btnBackground = [[UIImage imageNamed:@"edit-button-bg.png"] stretchableImageWithLeftCapWidth:4 topCapHeight:0];
-    [closeButton setBackgroundImage:btnBackground forState:UIControlStateNormal];
-    [closeButton setBackgroundImage:btnBackground forState:UIControlStateHighlighted];
-
-    // Set button keyboard image
-    UIImageView *keyboard = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"edit-button-icon-keyboard.png"]];
-    keyboard.frame = CGRectMake(5, 5, 22, 14);
-    keyboard.tag = tUIKeyboardCloseButtonKeyBoardImage;
-    [closeButton addSubview:keyboard];
-    
-    // Set button arrow image
-    UIImageView *arrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"edit-button-icon-up.png"]];
-    arrow.frame = CGRectMake(31, 5, 10, 14);
-    [closeButton addSubview:arrow];
-    
-    [window addSubview:closeButton];
-    [window bringSubviewToFront:closeButton];
     
     // Set button close event
     [closeButton addTarget:self action:@selector(clickKeyboardCloseButton:) forControlEvents:UIControlEventTouchUpInside];
@@ -96,11 +96,7 @@ _UIViewAnimationOptionsFromCurve(UIViewAnimationCurve curve)
 
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     UIButton *closeButton = (UIButton *)[window viewWithTag:tUIKeyboardCloseButton];
-    if (nil!=closeButton)
-    {
-        [closeButton removeFromSuperview];
-        closeButton = nil;
-    }
+    [closeButton removeTarget:self action:@selector(clickKeyboardCloseButton:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 /**
@@ -113,11 +109,7 @@ _UIViewAnimationOptionsFromCurve(UIViewAnimationCurve curve)
 
     UIWindow *window = [[UIApplication sharedApplication] keyWindow];
     UIButton *closeButton = (UIButton *)[window viewWithTag:tUIKeyboardCloseButton];
-    if (nil!=closeButton)
-    {
-        [closeButton removeFromSuperview];
-        closeButton = nil;
-    }
+    [closeButton removeTarget:self action:@selector(clickKeyboardCloseButton:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 #pragma mark button animations
@@ -190,6 +182,9 @@ _UIViewAnimationOptionsFromCurve(UIViewAnimationCurve curve)
 
 - (void)keyboardCloseButtonWillShow:(NSNotification *)notification
 {
+    if (!self || ![self isViewLoaded])
+        return;
+
     NSTimeInterval animationDuration;
     UIViewAnimationCurve animationCurve;
     CGRect frameEnd;
