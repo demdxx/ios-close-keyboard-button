@@ -24,25 +24,26 @@ How to use
 
 ...
 
-@implementation UIViewController
+@implementation MyController
 
 #pragma mark UIViewController load/unload view events
 
-- (void)viewDidLoad
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidLoad];
-    
-    // Register keyboard close button
-    [self registerKeyboardCloseButton];
-    
-    // ...
+    [self registerKeyboardCloseButtonForIphone];
+
+    /* ... */
+
+    [super viewWillAppear:animated];
 }
 
-- (void)viewDidUnload
+- (void)viewWillDisappear:(BOOL)animated
 {
-    // Unregister all accepted events
-    [self unregisterKeyboardCloseButtonFast];
-    [super viewDidUnload];
+    [self unregisterKeyboardCloseButton];
+
+    /* ... */
+
+    [super viewWillDisappear:animated];
 }
 
 @end

@@ -17,7 +17,13 @@ enum {
 
 @interface UIViewController (KeyboardClose)
 
+@property (nonatomic, retain) NSDictionary* keyboardInfo;
+
+- (UIView *)keyboardAcceptView;
+
+- (void)registerKeyboardCloseButtonForIphone;
 - (void)registerKeyboardCloseButton;
+- (void)registerKeyboardCloseButton:(BOOL)reset;
 - (void)unregisterKeyboardCloseButton;
 
 /**
