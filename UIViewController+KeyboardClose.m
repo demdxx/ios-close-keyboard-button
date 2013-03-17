@@ -231,9 +231,15 @@ _UIViewAnimationOptionsFromCurve(UIViewAnimationCurve curve)
     const CGFloat kWidth = MAX(keyboardFrame.size.width, keyboardFrame.size.height);
     if (show)
     {
+        CGRect kafr = self.keyboardAcceptView.frame;
+        CGFloat height = keyboardFrame.size.height+keyboardFrame.origin.y;
+        if (kafr.origin.y>height)
+        {
+            height = kafr.origin.y;
+        }
         return CGPointMake(
             kWidth-btnSize.width-7,
-            viewOffset-btnSize.height-self.keyboardAcceptView.frame.origin.y-7);
+            viewOffset-btnSize.height-height+kafr.size.height-7);
     }
     return CGPointMake(kWidth-btnSize.width-7, viewOffset+10);
 }
