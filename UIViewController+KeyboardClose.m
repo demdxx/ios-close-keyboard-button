@@ -231,8 +231,8 @@ _UIViewAnimationOptionsFromCurve(UIViewAnimationCurve curve)
     const CGFloat kWidth = MAX(keyboardFrame.size.width, keyboardFrame.size.height);
     if (show)
     {
-        CGRect kafr = self.keyboardAcceptView.frame;
-        CGFloat height = keyboardFrame.size.height+keyboardFrame.origin.y;
+        CGRect kafr = self.keyboardAcceptView.bounds;
+        CGFloat height = MIN(keyboardFrame.size.height, keyboardFrame.size.width)+MAX(keyboardFrame.origin.y, keyboardFrame.origin.x);
         if (kafr.origin.y>height)
         {
             height = kafr.origin.y;
